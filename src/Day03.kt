@@ -13,21 +13,19 @@ fun main() {
     }
 
     fun part2(input: List<Int>, length: Int): Int {
-        val ogrList = input.toMutableList()
-        val co2SRList = input.toMutableList()
+        var ogrList = input.toList()
+        var co2SRList = input.toList()
 
         for (i in length - 1 downTo 0) {
-            val bitsSet = ogrList.sumOf { (it shr i) and 1 }
-            val mostCommon = if (bitsSet >= ogrList.size - bitsSet) 1 else 0
-            ogrList.removeIf { (it shr i) and 1 == if (mostCommon == 1) 0 else 1 }
-            if (ogrList.size == 1) break
-        }
-
-        for (i in length - 1 downTo 0) {
-            val bitsSet = co2SRList.sumOf { (it shr i) and 1 }
-            val leastCommon = if (bitsSet < co2SRList.size - bitsSet) 1 else 0
-            co2SRList.removeIf { (it shr i) and 1 == if (leastCommon == 1) 0 else 1 }
-            if (co2SRList.size == 1) break
+            if (ogrList.size > 1) {
+                val (ogrBitsSet, ogrBitsUnset) = ogrList.partition { (it shr i) and 1 == 1 }
+                ogrList = if (ogrBitsSet.size >= ogrBitsUnset.size) ogrBitsSet else ogrBitsUnset
+            }
+            if (co2SRList.size > 1) {
+                val (co2SRBitsSet, co2SRBitsUnset) = co2SRList.partition { (it shr i) and 1 == 1 }
+                co2SRList = if (co2SRBitsSet.size < co2SRBitsUnset.size) co2SRBitsSet else co2SRBitsUnset
+            }
+            if (ogrList.size == 1 && co2SRList.size == 1) break
         }
 
         return ogrList.single() * co2SRList.single()
