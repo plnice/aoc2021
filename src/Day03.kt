@@ -18,12 +18,12 @@ fun main() {
 
         for (i in length - 1 downTo 0) {
             if (ogrList.size > 1) {
-                val (ogrBitsSet, ogrBitsUnset) = ogrList.partition { (it shr i) and 1 == 1 }
-                ogrList = if (ogrBitsSet.size >= ogrBitsUnset.size) ogrBitsSet else ogrBitsUnset
+                val (bitsSet, bitsUnset) = ogrList.partition { (it shr i) and 1 == 1 }
+                ogrList = if (bitsSet.size >= bitsUnset.size) bitsSet else bitsUnset
             }
             if (co2SRList.size > 1) {
-                val (co2SRBitsSet, co2SRBitsUnset) = co2SRList.partition { (it shr i) and 1 == 1 }
-                co2SRList = if (co2SRBitsSet.size < co2SRBitsUnset.size) co2SRBitsSet else co2SRBitsUnset
+                val (bitsSet, bitsUnset) = co2SRList.partition { (it shr i) and 1 == 1 }
+                co2SRList = if (bitsSet.size < bitsUnset.size) bitsSet else bitsUnset
             }
             if (ogrList.size == 1 && co2SRList.size == 1) break
         }
