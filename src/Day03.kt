@@ -40,6 +40,6 @@ fun main() {
     println(part2(input.first, input.second))
 }
 
-fun getMappedInput(name: String) = readInput(name)
+private fun getMappedInput(name: String) = readInput(name)
     .map { Integer.parseInt(it, 2) to it.length }
     .let { it.map { it.first } to it.first().second }
