@@ -49,8 +49,8 @@ fun main() {
     println(part2(input))
 }
 
-data class Input(val drawn: List<Int>, val boards: List<Board>)
-data class Board(val rows: List<List<Int>>, val columns: List<List<Int>>)
+private data class Input(val drawn: List<Int>, val boards: List<Board>)
+private data class Board(val rows: List<List<Int>>, val columns: List<List<Int>>)
 
 private fun getMappedInput(name: String) = readInput(name)
     .let { input ->
