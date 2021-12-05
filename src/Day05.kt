@@ -21,8 +21,7 @@ fun main() {
             .flatten()
             .groupingBy { it }
             .eachCount()
-            .filter { it.value >= 2 }
-            .size
+            .count { it.value >= 2 }
     }
 
     fun part2(input: List<Line>): Int {
@@ -52,8 +51,7 @@ fun main() {
             .flatten()
             .groupingBy { it }
             .eachCount()
-            .filter { it.value >= 2 }
-            .size
+            .count { it.value >= 2 }
     }
 
     val testInput = getMappedInput("Day05_test")
