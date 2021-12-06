@@ -18,35 +18,35 @@ fun main() {
     }
 
     fun part2(input: List<Lanternfish>, days: Int): Long {
-        val resultMap = mutableMapOf<Int, Long>()
+        val results = mutableMapOf<Int, Long>()
 
-        resultMap[0] = input.size.toLong()
-        for (day in 1..days) resultMap[day] = 0L
+        results[0] = input.size.toLong()
+        for (day in 1..days) results[day] = 0L
 
         input.forEach {
             var i = it.timer + 1
             while (i <= days) {
-                resultMap[i] = resultMap.getValue(i) + 1L
+                results[i] = results.getValue(i) + 1L
                 i += 7
             }
         }
 
         for (day in 1..days) {
-            val newFishes = resultMap.getValue(day)
+            val newFishes = results.getValue(day)
             if (newFishes > 0) {
                 var i = day + 9
                 while (i <= days) {
-                    resultMap[i] = resultMap.getValue(i) + newFishes
+                    results[i] = results.getValue(i) + newFishes
                     i += 7
                 }
             }
         }
 
         for (day in 1..days) {
-            resultMap[day] = resultMap.getValue(day - 1) + resultMap.getValue(day)
+            results[day] = results.getValue(day - 1) + results.getValue(day)
         }
 
-        return resultMap.getValue(days)
+        return results.getValue(days)
     }
 
     val testInput = getMappedInput("Day06_test")
