@@ -17,8 +17,6 @@ fun main() {
         return fishes.size
     }
 
-    data class DayTimer(val day: Int, val timer: Int)
-
     fun part2(input: List<Lanternfish>, days: Int): Long {
         val resultMap = mutableMapOf<Int, Long>()
 
@@ -61,9 +59,7 @@ fun main() {
     println(part2(input, days = 256))
 }
 
-private data class Lanternfish(val timer: Int = 8) {
-    override fun toString() = timer.toString()
-}
+private data class Lanternfish(val timer: Int = 8)
 
 private fun getMappedInput(name: String) = readInput(name)
     .first()
