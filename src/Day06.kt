@@ -19,104 +19,46 @@ fun main() {
 
     data class DayTimer(val day: Int, val timer: Int)
 
-    fun part2v1(input: List<Lanternfish>, days: Int): Long {
-        var result = input.size.toLong()
+    fun part2(input: List<Lanternfish>, days: Int): Long {
+        val resultMap = mutableMapOf<Int, Long>()
 
-        var creationDates = input
-            .map {
-                val dates = mutableListOf<Int>()
-                var date = it.timer + 1
-                while (date <= days) {
-                    dates.add(date)
-                    date += 7
-                }
-                dates
+        resultMap[0] = input.size.toLong()
+        for (day in 1..days) resultMap[day] = 0L
+
+        input.forEach {
+            var i = it.timer + 1
+            while (i <= days) {
+                resultMap[i] = resultMap.getValue(i) + 1L
+                i += 7
             }
-            .flatten()
-
-        result += creationDates.size
-
-        while (creationDates.isNotEmpty()) {
-            creationDates = creationDates
-                .map {
-                    val dates = mutableListOf<Int>()
-                    var date = it + 9
-                    while (date <= days) {
-                        dates.add(date)
-                        date += 7
-                    }
-                    dates
-                }
-                .flatten()
-            result += creationDates.size
         }
 
-        return result
-    }
-
-    fun part2v2(input: List<Lanternfish>, days: Int): Long {
-        fun recursiveSpawns(dayTimer: DayTimer, maxDays: Int): Long {
-            val (day, timer) = dayTimer
-
-            if (day == maxDays) return 1
-
-            var result = 0L
-
-            if (timer == 0) {
-                result += recursiveSpawns(DayTimer(day + 1, 8), maxDays)
-            }
-
-            val next = DayTimer(
-                day + 1, when (timer) {
-                    8 -> 7
-                    7 -> 6
-                    else -> (timer - 1).mod(7)
+        for (day in 1..days) {
+            val newFishes = resultMap.getValue(day)
+            if (newFishes > 0) {
+                var i = day + 9
+                while (i <= days) {
+                    resultMap[i] = resultMap.getValue(i) + newFishes
+                    i += 7
                 }
-            )
-
-            return result + recursiveSpawns(next, maxDays)
+            }
         }
 
-        return input.sumOf { recursiveSpawns(DayTimer(0, it.timer), days) }
-    }
-
-    fun part2v3(input: List<Lanternfish>, days: Int): Long {
-        var result = 0L
-        val dayTimers = input.map { DayTimer(0, it.timer) }.toMutableList()
-
-        while (dayTimers.isNotEmpty()) {
-            val (day, timer) = dayTimers.removeFirst()
-            if (day == days) {
-                result++
-                continue
-            }
-            if (timer == 0) {
-                dayTimers.add(DayTimer(day + 1, 8))
-            }
-            dayTimers.add(
-                DayTimer(
-                    day + 1, when (timer) {
-                        8 -> 7
-                        7 -> 6
-                        else -> (timer - 1).mod(7)
-                    }
-                )
-            )
+        for (day in 1..days) {
+            resultMap[day] = resultMap.getValue(day - 1) + resultMap.getValue(day)
         }
 
-        return result
+        return resultMap.getValue(days)
     }
 
     val testInput = getMappedInput("Day06_test")
     check(part1(testInput) == 5934)
-    check(part2v1(testInput, days = 80) == 5934L)
-    check(part2v2(testInput, days = 80) == 5934L)
-    check(part2v3(testInput, days = 80) == 5934L)
-//    check(part2(testInput, days = 256) == 26984457539)
+    check(part2(testInput, days = 80) == 5934L)
+    check(part2(testInput, days = 256) == 26984457539)
 
     val input = getMappedInput("Day06")
     println(part1(input))
-//    println(part2(input, days = 256))
+    println(part2(input, days = 256))
 }
 
 private data class Lanternfish(val timer: Int = 8) {
