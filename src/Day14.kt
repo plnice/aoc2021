@@ -24,11 +24,6 @@ fun main() {
         fun List<Rule>.find(elements: String) = first { it.elements == elements }
         fun String.extendWith(rule: Rule) = listOf(this[0].toString() + rule.toAdd, rule.toAdd.toString() + this[1])
 
-        fun String.mapToPairs(): List<String> {
-            assert(this.length == 2)
-            return this.extendWith(rules.find(this))
-        }
-
         fun merge(map1: Map<Char, Long>, map2: Map<Char, Long>): Map<Char, Long> {
             val keys = map1.keys + map2.keys
             return keys.associateWith { key -> (map1[key] ?: 0) + (map2[key] ?: 0) }
@@ -42,7 +37,7 @@ fun main() {
             .toMutableMap()
 
         repeat(repeats) {
-            val pairsCountExtended = pairsCount.mapKeys { it.key.mapToPairs() }
+            val pairsCountExtended = pairsCount.mapKeys { it.key.extendWith(rules.find(it.key)) }
 
             pairsCount.clear()
 
@@ -61,7 +56,6 @@ fun main() {
     }
 
     val (testTemplate, testRules) = getMappedInput("Day14_test")
-
     check(part1(testTemplate, testRules) == 1588)
     check(part2(testTemplate, testRules, repeats = 10) == 1588L)
     check(part2(testTemplate, testRules, repeats = 40) == 2188189693529L)
